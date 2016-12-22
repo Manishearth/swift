@@ -41,7 +41,7 @@ swift::unicode::getGraphemeClusterBreakProperty(uint32_t C) {
   return GraphemeClusterBreakProperty::Other;
 }
 
-const uint16_t swift::unicode::ExtendedGraphemeClusterNoBoundaryRulesMatrix[] = {
+const uint32_t swift::unicode::ExtendedGraphemeClusterNoBoundaryRulesMatrix[] = {
 % for row in get_extended_grapheme_cluster_rules_matrix(break_table):
   ${row},
 % end

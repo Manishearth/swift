@@ -500,10 +500,12 @@ def get_extended_grapheme_cluster_rules_matrix(grapheme_cluster_break_table):
         (['L'], 'no_boundary', ['L', 'V', 'LV', 'LVT']),
         (['LV', 'V'], 'no_boundary', ['V', 'T']),
         (['LVT', 'T'], 'no_boundary', ['T']),
-        (['Regional_Indicator'], 'no_boundary', ['Regional_Indicator']),
-        (any_value, 'no_boundary', ['Extend']),
+        (any_value, 'no_boundary', ['Extend', 'ZWJ']),
         (any_value, 'no_boundary', ['SpacingMark']),
         (['Prepend'], 'no_boundary', any_value),
+        (['Extend'], 'no_boundary', ['E_Modifier']), # Actually (E_Base | EBG) Extend* × E_Modifier
+        (['ZWJ'], 'no_boundary', ['Glue_After_Zwj', 'EBG']),
+        (['Regional_Indicator'], 'no_boundary', ['Regional_Indicator']), # Actually 'do not break if there are an odd number of RIs before you'
         (any_value, 'boundary', any_value),
     ]
 
@@ -520,7 +522,7 @@ def get_extended_grapheme_cluster_rules_matrix(grapheme_cluster_break_table):
                 rules_matrix[first][second] = action
 
     # Make sure we can pack one row of the matrix into a 'uint16_t'.
-    assert(len(any_value) <= 16)
+    assert(len(any_value) <= 32)
 
     result = []
     for first in any_value:
